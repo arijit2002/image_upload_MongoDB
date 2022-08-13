@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const multer = require('multer');
+const path = require('path');
 
 require('./db/conn');
 const Images = require("./models/images");
@@ -22,7 +23,7 @@ const upload = multer({
 }).single('testImage')
 
 app.get("/",(req,res)=>{
-    res.send("upload file");
+    res.sendFile(path.join(__dirname, '/public/index.html'));
 });
 
 app.post("/upload",(req,res)=>{
@@ -39,7 +40,8 @@ app.post("/upload",(req,res)=>{
                 }
             })
             newImage.save()
-            .then(()=> res.send('successfully uploaded')).catch(err=>console.log(err));
+            .then(()=> res.redirect('/')).catch(err=>console.log(err));
+            
         }
     });
 });
